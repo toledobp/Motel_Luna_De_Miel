@@ -1,1 +1,2044 @@
-# Motel_Luna_De_Miel
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MotelOS Pro — Sistema Avanzado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════════════════════════
+   DESIGN TOKENS
+══════════════════════════════════════════════════════════════ */
+:root {
+  --bg0: #07080f;
+  --bg1: #0d0f1a;
+  --bg2: #131525;
+  --bg3: #1a1d30;
+  --bg4: #22263a;
+  --bg5: #2a2f47;
+
+  --border:  rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.11);
+  --border3: rgba(255,255,255,0.18);
+
+  --t1: #f0f2ff;
+  --t2: #8890c0;
+  --t3: #4a5080;
+  --t4: #2e3258;
+
+  /* accent — electric indigo */
+  --acc:    #7c6fff;
+  --acc2:   #5a4fe0;
+  --acc-bg: rgba(124,111,255,0.10);
+  --acc-bd: rgba(124,111,255,0.28);
+
+  /* states */
+  --green:    #22d3a0;
+  --green-bg: rgba(34,211,160,0.08);
+  --green-bd: rgba(34,211,160,0.22);
+
+  --red:      #ff5f72;
+  --red-bg:   rgba(255,95,114,0.08);
+  --red-bd:   rgba(255,95,114,0.22);
+
+  --amber:    #ffb83f;
+  --amber-bg: rgba(255,184,63,0.08);
+  --amber-bd: rgba(255,184,63,0.22);
+
+  --blue:     #38bfff;
+  --blue-bg:  rgba(56,191,255,0.08);
+  --blue-bd:  rgba(56,191,255,0.22);
+
+  --violet:   #c084fc;
+  --violet-bg: rgba(192,132,252,0.08);
+  --violet-bd: rgba(192,132,252,0.22);
+
+  /* alert pulse */
+  --warn:    #ff3b55;
+
+  --r-sm: 8px;
+  --r:    12px;
+  --r-lg: 18px;
+  --r-xl: 24px;
+
+  --shadow: 0 8px 32px rgba(0,0,0,0.55);
+  --shadow-lg: 0 16px 56px rgba(0,0,0,0.7);
+
+  --sidebar-w: 228px;
+  --header-h:  58px;
+
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--t1);
+  background: var(--bg0);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg5); border-radius: 3px; }
+
+/* ══════════════════════════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════════════════════════ */
+body { min-height: 100vh; overflow-x: hidden; }
+#app-root { min-height: 100vh; }
+
+/* LOGIN */
+#login-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg0);
+  background-image:
+    radial-gradient(ellipse 60% 60% at 70% 20%, rgba(124,111,255,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(34,211,160,0.05) 0%, transparent 60%);
+}
+.login-card {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  padding: 40px 36px;
+  width: 360px;
+  box-shadow: var(--shadow-lg);
+}
+.login-brand {
+  text-align: center; margin-bottom: 32px;
+}
+.login-logo {
+  width: 52px; height: 52px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--acc2), var(--acc));
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 700; color: #fff;
+  margin-bottom: 12px;
+}
+.login-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--t1);
+}
+.login-sub { font-size: 12px; color: var(--t3); margin-top: 4px; }
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; color: var(--t3); display: block; margin-bottom: 7px; }
+.form-input {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r-sm); padding: 10px 14px; color: var(--t1);
+  font-size: 14px; transition: border-color 0.2s;
+  outline: none;
+}
+.form-input:focus { border-color: var(--acc-bd); }
+.form-input::placeholder { color: var(--t3); }
+.login-btn {
+  width: 100%; padding: 11px;
+  background: linear-gradient(135deg, var(--acc2), var(--acc));
+  border: none; border-radius: var(--r-sm);
+  color: #fff; font-size: 14px; font-weight: 600;
+  cursor: pointer; margin-top: 8px;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.login-btn:hover { opacity: 0.9; }
+.login-btn:active { transform: scale(0.98); }
+.login-err { font-size: 12px; color: var(--red); text-align: center; margin-top: 10px; min-height: 16px; }
+.login-users-hint { font-size: 11px; color: var(--t4); text-align: center; margin-top: 14px; }
+
+/* MAIN APP */
+#main-app { display: none; min-height: 100vh; }
+.layout { display: flex; min-height: 100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--bg1);
+  border-right: 1px solid var(--border);
+  position: fixed; top: 0; left: 0; bottom: 0;
+  z-index: 300;
+  display: flex; flex-direction: column;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.sidebar-logo {
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--acc2), var(--acc));
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.logo-name { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.logo-name em { color: var(--acc); font-style: normal; }
+
+.sidebar-user {
+  margin: 10px 10px 0;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 9px 12px;
+  display: flex; align-items: center; gap: 9px;
+}
+.user-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--acc-bg); border: 1px solid var(--acc-bd);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 600; color: var(--acc); flex-shrink: 0;
+}
+.user-name { font-size: 12px; font-weight: 500; color: var(--t1); line-height: 1.3; }
+.user-role { font-size: 10px; color: var(--t3); }
+
+.sidebar-nav { padding: 12px 10px; flex: 1; overflow-y: auto; }
+.nav-section { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; color: var(--t4); text-transform: uppercase; padding: 8px 10px 4px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--r-sm);
+  cursor: pointer; margin-bottom: 2px;
+  color: var(--t2); font-size: 13px; font-weight: 400;
+  transition: background 0.15s, color 0.15s;
+  user-select: none; position: relative;
+}
+.nav-item:hover { background: var(--bg3); color: var(--t1); }
+.nav-item.active { background: var(--acc-bg); color: var(--t1); font-weight: 500; }
+.nav-item.active::before {
+  content: ''; position: absolute; left: 0; top: 20%; bottom: 20%;
+  width: 2px; background: var(--acc); border-radius: 2px;
+}
+.nav-icon { font-size: 15px; width: 20px; text-align: center; }
+.nav-badge {
+  margin-left: auto; font-size: 10px; font-weight: 600;
+  background: var(--red-bg); color: var(--red); border: 1px solid var(--red-bd);
+  border-radius: 20px; padding: 1px 7px; display: none;
+}
+.nav-badge.show { display: block; }
+
+.sidebar-caja {
+  margin: 0 10px 10px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r-sm); padding: 10px 12px;
+}
+.caja-status { font-size: 10px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--t3); margin-bottom: 4px; }
+.caja-val { font-size: 13px; font-weight: 600; color: var(--t1); }
+.caja-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 5px; }
+.caja-dot.open { background: var(--green); }
+.caja-dot.closed { background: var(--red); }
+
+.sidebar-footer {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.logout-btn {
+  font-size: 11px; color: var(--t3); background: none; border: none;
+  cursor: pointer; padding: 4px 8px; border-radius: var(--r-sm);
+  transition: background 0.15s, color 0.15s;
+}
+.logout-btn:hover { background: var(--red-bg); color: var(--red); }
+.version-tag { font-size: 10px; color: var(--t4); }
+
+/* TOPBAR */
+.topbar {
+  height: var(--header-h);
+  background: var(--bg1);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 22px;
+  position: sticky; top: 0; z-index: 100;
+}
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.burger {
+  display: none; background: none; border: none; cursor: pointer;
+  color: var(--t2); padding: 6px; border-radius: var(--r-sm);
+}
+.burger:hover { background: var(--bg3); }
+.burger svg { display: block; }
+.page-info {}
+.page-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; }
+.page-sub { font-size: 11px; color: var(--t3); margin-top: 1px; }
+.topbar-right { display: flex; align-items: center; gap: 10px; }
+.clock-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; color: var(--t2);
+  background: var(--bg3); border: 1px solid var(--border);
+  padding: 4px 12px; border-radius: 20px;
+}
+.shortcut-hint { font-size: 11px; color: var(--t4); display: none; }
+.alert-bell {
+  position: relative; width: 32px; height: 32px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px;
+}
+.alert-dot {
+  position: absolute; top: 4px; right: 4px;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--red);
+  display: none;
+}
+.alert-dot.show { display: block; }
+
+/* MAIN CONTENT */
+.main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; }
+.view { display: none; padding: 22px; animation: fadeUp 0.22s ease; }
+.view.active { display: block; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+
+/* SIDEBAR OVERLAY */
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.6); z-index: 299;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   STAT CARDS
+══════════════════════════════════════════════════════════════ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px; margin-bottom: 22px;
+}
+.stat-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.stat-card:hover { border-color: var(--border2); }
+.stat-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: var(--c, var(--acc)); opacity: 0.7;
+}
+.stat-lbl { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--t3); margin-bottom: 8px; }
+.stat-val { font-size: 26px; font-weight: 600; color: var(--t1); line-height: 1; font-family: 'Syne', sans-serif; }
+.stat-sub { font-size: 10px; color: var(--t3); margin-top: 5px; line-height: 1.4; }
+.stat-icon { position: absolute; top: 14px; right: 14px; font-size: 18px; opacity: 0.12; }
+
+/* ══════════════════════════════════════════════════════════════
+   ROOMS GRID
+══════════════════════════════════════════════════════════════ */
+.section-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 12px; padding: 0 2px;
+}
+.section-lbl {
+  font-size: 10px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.09em; color: var(--t3);
+  display: flex; align-items: center; gap: 8px;
+}
+.section-count {
+  font-size: 11px; color: var(--t2);
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 2px 10px;
+}
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px; margin-bottom: 24px;
+}
+.room-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden;
+  transition: transform 0.15s, border-color 0.2s, box-shadow 0.2s;
+}
+.room-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.4); }
+
+.room-card.available { border-color: var(--green-bd); }
+.room-card.available .rc-accent { background: var(--green); }
+.room-card.occupied  { border-color: var(--red-bd);   }
+.room-card.occupied .rc-accent  { background: var(--red);   }
+.room-card.dirty     { border-color: var(--amber-bd); }
+.room-card.dirty .rc-accent     { background: var(--amber); }
+.room-card.cleaning  { border-color: var(--blue-bd);  }
+.room-card.cleaning .rc-accent  { background: var(--blue);  }
+
+/* alert state */
+.room-card.alert-soon { border-color: rgba(255,184,63,0.5); animation: pulse-border-warn 1.5s ease-in-out infinite; }
+.room-card.alert-over { border-color: rgba(255,59,85,0.7);  animation: pulse-border-red  1s  ease-in-out infinite; }
+
+@keyframes pulse-border-warn {
+  0%,100% { box-shadow: 0 0 0 0px rgba(255,184,63,0); }
+  50%      { box-shadow: 0 0 0 3px rgba(255,184,63,0.25); }
+}
+@keyframes pulse-border-red {
+  0%,100% { box-shadow: 0 0 0 0px rgba(255,59,85,0); }
+  50%      { box-shadow: 0 0 0 4px rgba(255,59,85,0.3); }
+}
+
+.rc-accent { position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+
+.room-hdr { display: flex; align-items: flex-start; justify-content: space-between; }
+.room-num { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--t1); }
+.room-num-sub { font-size: 10px; color: var(--t3); margin-top: 1px; }
+
+.room-badge {
+  font-size: 9px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; padding: 3px 8px; border-radius: 20px;
+}
+.rb-available { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+.rb-occupied  { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-bd);   }
+.rb-dirty     { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd); }
+.rb-cleaning  { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-bd);  }
+
+.room-divider { height: 1px; background: var(--border); }
+
+.room-body { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.room-icon { font-size: 26px; text-align: center; opacity: 0.35; padding: 4px 0; }
+.room-timer {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px; font-weight: 500; text-align: center;
+  color: var(--red); letter-spacing: 0.04em;
+}
+.room-timer.warn { color: var(--amber); }
+.room-timer.over { color: var(--warn); font-weight: 700; }
+.room-cost { text-align: center; font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--t1); }
+.room-cost .unit { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--t3); font-weight: 400; }
+.room-alert-pill {
+  text-align: center; font-size: 10px; padding: 3px 0;
+  border-radius: var(--r-sm); font-weight: 500;
+}
+.pill-warn { background: var(--amber-bg); color: var(--amber); }
+.pill-over { background: var(--red-bg); color: var(--red); animation: blink 1s ease-in-out infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.5; } }
+
+.room-staff { font-size: 10px; color: var(--t3); text-align: center; }
+
+.room-action {
+  width: 100%; padding: 8px;
+  border-radius: var(--r-sm);
+  border: 1px solid var(--border2);
+  background: var(--bg3); color: var(--t2);
+  font-size: 12px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.room-card.available .room-action:hover { background: var(--green-bg); color: var(--green); border-color: var(--green-bd); }
+.room-card.occupied  .room-action:hover { background: var(--red-bg);   color: var(--red);   border-color: var(--red-bd);   }
+.room-card.dirty     .room-action:hover { background: var(--amber-bg); color: var(--amber); border-color: var(--amber-bd); }
+.room-card.cleaning  .room-action:hover { background: var(--blue-bg);  color: var(--blue);  border-color: var(--blue-bd);  }
+
+.room-actions-row { display: flex; gap: 6px; }
+.room-actions-row .room-action { flex: 1; }
+
+/* keyboard hint */
+.kbd {
+  display: inline-block; font-family: 'DM Mono', monospace;
+  font-size: 9px; background: var(--bg4); border: 1px solid var(--border2);
+  border-radius: 4px; padding: 1px 5px; color: var(--t3);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 800; animation: fadeIn 0.18s ease;
+}
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.modal {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r-xl);
+  padding: 28px;
+  width: 90%; max-width: 460px;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.22s cubic-bezier(0.4,0,0.2,1);
+  max-height: 90vh; overflow-y: auto;
+}
+@keyframes slideUp { from { transform:translateY(18px);opacity:0; } to { transform:none;opacity:1; } }
+.modal-xl { max-width: 580px; }
+.modal-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+.modal-sub { font-size: 12px; color: var(--t3); margin-bottom: 20px; }
+
+.info-box {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 15px 16px; margin-bottom: 16px;
+}
+.info-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; }
+.info-row + .info-row { border-top: 1px solid var(--border); margin-top: 5px; padding-top: 9px; }
+.ik { font-size: 12px; color: var(--t2); }
+.iv { font-size: 13px; font-weight: 500; color: var(--t1); font-family: 'DM Mono', monospace; }
+.iv-big { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: var(--green); }
+.iv-warn { color: var(--amber); }
+
+.pill-warn-inline {
+  display: inline-block; font-size: 11px; padding: 3px 10px;
+  background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-bd);
+  border-radius: 20px; margin-bottom: 14px;
+}
+
+.modal-sect-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.09em; color: var(--t3); margin-bottom: 10px; font-weight: 500; }
+.pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.pay-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 18px 10px;
+  background: var(--bg3); border: 1.5px solid var(--border2);
+  border-radius: var(--r); cursor: pointer; font-family: inherit;
+  color: var(--t2); transition: all 0.15s;
+}
+.pay-btn:hover { border-color: var(--acc-bd); background: var(--acc-bg); color: var(--t1); }
+.pay-btn.selected { border-color: var(--acc); background: var(--acc-bg); color: var(--t1); }
+.pay-btn-icon { font-size: 28px; }
+.pay-btn-lbl { font-size: 13px; font-weight: 600; }
+.pay-btn-desc { font-size: 10px; color: var(--t3); }
+.pay-btn.selected .pay-btn-desc { color: var(--t2); }
+
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 4px; }
+.btn { padding: 9px 20px; border-radius: var(--r-sm); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid; transition: all 0.15s; }
+.btn-ghost   { background: transparent; border-color: var(--border2); color: var(--t2); }
+.btn-ghost:hover { background: var(--bg3); color: var(--t1); }
+.btn-primary { background: var(--acc2); border-color: transparent; color: #fff; }
+.btn-primary:hover { background: var(--acc); }
+.btn-success { background: var(--green-bg); border-color: var(--green-bd); color: var(--green); }
+.btn-success:hover { background: rgba(34,211,160,0.16); }
+.btn-danger  { background: var(--red-bg); border-color: var(--red-bd); color: var(--red); }
+.btn-danger:hover { background: rgba(255,95,114,0.16); }
+.btn-amber   { background: var(--amber-bg); border-color: var(--amber-bd); color: var(--amber); }
+.btn-amber:hover { background: rgba(255,184,63,0.16); }
+.btn:disabled { opacity: 0.38; cursor: not-allowed; }
+
+/* COMPROBANTE */
+.comprobante {
+  background: var(--bg3); border: 1px dashed var(--border2);
+  border-radius: var(--r); padding: 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; color: var(--t2);
+  margin-bottom: 16px;
+  line-height: 1.9;
+}
+.comprobante-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; color: var(--t1); text-align: center; margin-bottom: 8px; }
+.comprobante-div { border-top: 1px dashed var(--border2); margin: 8px 0; }
+.comprobante-row { display: flex; justify-content: space-between; }
+.comprobante-total { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--green); text-align: center; margin-top: 6px; }
+
+/* ══════════════════════════════════════════════════════════════
+   CONSUMOS
+══════════════════════════════════════════════════════════════ */
+--violet:    #c084fc;
+--violet-bg: rgba(192,132,252,0.09);
+--violet-bd: rgba(192,132,252,0.24);
+
+.consumos-box {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 8px 10px;
+}
+.consumos-box-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 5px;
+}
+.consumos-box-lbl {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--t3); font-weight: 500;
+}
+.consumos-box-total {
+  font-size: 11px; font-weight: 700;
+  color: #c084fc; font-family: 'DM Mono', monospace;
+}
+.consumo-row {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--t2); padding: 3px 0;
+  border-top: 1px solid var(--border);
+}
+.consumo-row-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.consumo-row-price { color: #c084fc; font-family: 'DM Mono', monospace; font-size: 11px; flex-shrink: 0; }
+.consumo-row-del {
+  background: none; border: none; cursor: pointer;
+  color: var(--t4); padding: 0 2px; font-size: 12px; line-height: 1;
+  transition: color 0.12s; flex-shrink: 0;
+}
+.consumo-row-del:hover { color: var(--red); }
+.consumos-empty { font-size: 10px; color: var(--t4); text-align: center; padding: 2px 0; }
+.btn-add-consumo {
+  width: 100%; padding: 6px;
+  border: 1px dashed rgba(192,132,252,0.3);
+  border-radius: var(--r-sm);
+  background: transparent; color: #c084fc;
+  font-size: 11px; font-weight: 500; cursor: pointer;
+  transition: all 0.14s;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.btn-add-consumo:hover {
+  background: rgba(192,132,252,0.09);
+  border-style: solid; border-color: rgba(192,132,252,0.35);
+}
+/* consumo modal quick-pills */
+.qpills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.qpill {
+  padding: 5px 11px; border-radius: 20px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  font-size: 12px; color: var(--t2); cursor: pointer;
+  transition: all 0.13s; user-select: none;
+}
+.qpill:hover { background: rgba(192,132,252,0.09); border-color: rgba(192,132,252,0.3); color: #c084fc; }
+.qpill em { font-style: normal; color: var(--t3); font-size: 10px; margin-left: 3px; }
+/* checkout consumos breakdown */
+.checkout-consumos { margin: 6px 0; }
+.checkout-consumo-line {
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--t2); padding: 2px 0;
+}
+.checkout-consumo-line span:last-child { color: #c084fc; font-family: 'DM Mono', monospace; }
+
+/* ══════════════════════════════════════════════════════════════
+   CAJA VIEW
+══════════════════════════════════════════════════════════════ */
+.caja-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.caja-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 22px;
+}
+.caja-card-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 16px; color: var(--t1); }
+.caja-big { font-family: 'Syne', sans-serif; font-size: 36px; font-weight: 700; color: var(--t1); margin: 6px 0; }
+.caja-lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--t3); }
+.caja-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.caja-row:last-child { border-bottom: none; }
+.caja-row-k { color: var(--t2); }
+.caja-row-v { font-weight: 500; color: var(--t1); font-family: 'DM Mono', monospace; }
+.caja-row-v.pos { color: var(--green); }
+.caja-row-v.neg { color: var(--red); }
+.caja-open-form { display: flex; flex-direction: column; gap: 12px; }
+.caja-history { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 18px; margin-top: 16px; }
+.caja-hist-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--t3); margin-bottom: 12px; font-weight: 500; }
+.hist-item { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+.hist-item:last-child { border-bottom: none; }
+.hist-date { color: var(--t3); font-family: 'DM Mono', monospace; }
+.hist-info { color: var(--t2); }
+.hist-total { font-weight: 600; color: var(--t1); }
+
+/* ══════════════════════════════════════════════════════════════
+   STATS / REPORTE VIEW
+══════════════════════════════════════════════════════════════ */
+.report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+.report-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 18px;
+}
+.report-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--t3); margin-bottom: 8px; font-weight: 500; }
+.report-val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 700; color: var(--t1); }
+.report-sub { font-size: 11px; color: var(--t3); margin-top: 5px; }
+
+/* CHART */
+.chart-area { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 20px; margin-bottom: 16px; }
+.chart-title { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--t3); margin-bottom: 16px; }
+.bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 120px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+.bar-fill { width: 100%; border-radius: 4px 4px 0 0; min-height: 3px; transition: height 0.5s ease; position: relative; }
+.bar-fill.cash { background: var(--green); }
+.bar-fill.qr   { background: var(--blue);  }
+.bar-fill.total { background: var(--acc); }
+.bar-lbl { font-size: 9px; color: var(--t3); font-family: 'DM Mono', monospace; }
+.bar-val { font-size: 10px; color: var(--t2); font-family: 'DM Mono', monospace; }
+
+.donut-wrap { display: flex; align-items: center; gap: 24px; }
+.donut-svg { flex-shrink: 0; }
+.donut-legend { display: flex; flex-direction: column; gap: 10px; }
+.dl-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.dl-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dl-name { color: var(--t2); }
+.dl-pct  { font-weight: 600; color: var(--t1); margin-left: auto; font-family: 'DM Mono', monospace; }
+
+/* ACTIVIDAD HORARIA */
+.hour-chart { display: flex; align-items: flex-end; gap: 3px; height: 60px; }
+.hour-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; height: 100%; justify-content: flex-end; }
+.hour-bar { width: 100%; background: var(--acc); border-radius: 2px 2px 0 0; opacity: 0.7; min-height: 2px; transition: height 0.4s ease; }
+.hour-bar.peak { opacity: 1; background: var(--acc); }
+.hour-tick { font-size: 8px; color: var(--t4); font-family: 'DM Mono', monospace; }
+
+/* ══════════════════════════════════════════════════════════════
+   HISTORIAL VIEW
+══════════════════════════════════════════════════════════════ */
+.hist-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+.hist-date-sel {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r-sm); padding: 7px 12px;
+  color: var(--t1); font-size: 13px; cursor: pointer; outline: none;
+}
+.hist-date-sel:focus { border-color: var(--acc-bd); }
+.hist-filter-btn {
+  padding: 7px 14px; border-radius: var(--r-sm);
+  background: var(--bg3); border: 1px solid var(--border2);
+  color: var(--t2); font-size: 12px; cursor: pointer; transition: all 0.15s;
+}
+.hist-filter-btn.active { background: var(--acc-bg); border-color: var(--acc-bd); color: var(--acc); }
+.hist-filter-btn:hover { background: var(--bg4); color: var(--t1); }
+
+.hist-table { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+.hist-thead {
+  display: grid; grid-template-columns: 70px 1fr 100px 80px 80px 90px 80px;
+  background: var(--bg3); border-bottom: 1px solid var(--border);
+  padding: 9px 18px;
+}
+.th { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--t3); }
+.hist-tbody { max-height: 400px; overflow-y: auto; }
+.hist-row {
+  display: grid; grid-template-columns: 70px 1fr 100px 80px 80px 90px 80px;
+  padding: 12px 18px; border-bottom: 1px solid var(--border);
+  align-items: center; transition: background 0.1s;
+}
+.hist-row:last-child { border-bottom: none; }
+.hist-row:hover { background: var(--bg3); }
+.td { font-size: 12px; color: var(--t2); }
+.td-bold { font-weight: 500; color: var(--t1); }
+.td-mono { font-family: 'DM Mono', monospace; }
+
+.pay-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+.tag-cash { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-bd); }
+.tag-qr   { background: var(--blue-bg);  color: var(--blue);  border: 1px solid var(--blue-bd);  }
+
+.empty-state { padding: 48px; text-align: center; color: var(--t3); font-size: 13px; }
+.empty-icon { font-size: 34px; margin-bottom: 10px; opacity: 0.25; }
+
+/* ══════════════════════════════════════════════════════════════
+   TOAST NOTIFICATIONS
+══════════════════════════════════════════════════════════════ */
+#toast-container {
+  position: fixed; bottom: 20px; right: 20px; z-index: 900;
+  display: flex; flex-direction: column; gap: 8px; pointer-events: none;
+}
+.toast {
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: var(--r); padding: 12px 16px;
+  font-size: 13px; color: var(--t1);
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: var(--shadow);
+  animation: toastIn 0.25s ease;
+  pointer-events: all; min-width: 240px; max-width: 320px;
+}
+.toast.success { border-left: 3px solid var(--green); }
+.toast.error   { border-left: 3px solid var(--red); }
+.toast.warning { border-left: 3px solid var(--amber); }
+.toast.info    { border-left: 3px solid var(--acc); }
+@keyframes toastIn { from { transform:translateX(30px);opacity:0; } to { transform:none;opacity:1; } }
+@keyframes toastOut { to { transform:translateX(30px);opacity:0; } }
+
+/* ══════════════════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS OVERLAY
+══════════════════════════════════════════════════════════════ */
+#kbd-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+  z-index: 850; display: none;
+  align-items: center; justify-content: center;
+}
+#kbd-overlay.show { display: flex; }
+.kbd-panel {
+  background: var(--bg2); border: 1px solid var(--border2);
+  border-radius: var(--r-xl); padding: 28px;
+  width: 380px; max-height: 80vh; overflow-y: auto;
+}
+.kbd-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+.kbd-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+.kbd-row:last-child { border-bottom: none; }
+.kbd-desc { color: var(--t2); }
+.kbd-keys { display: flex; gap: 4px; }
+
+/* UNDO BAR */
+#undo-bar {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 30px; padding: 10px 20px;
+  display: none; align-items: center; gap: 14px;
+  box-shadow: var(--shadow); z-index: 700; font-size: 13px; color: var(--t2);
+  animation: slideUpBar 0.25s ease;
+}
+#undo-bar.show { display: flex; }
+@keyframes slideUpBar { from { transform:translateX(-50%) translateY(20px);opacity:0; } to { transform:translateX(-50%) translateY(0);opacity:1; } }
+.undo-btn {
+  font-size: 12px; font-weight: 600; color: var(--acc);
+  background: none; border: none; cursor: pointer; padding: 0;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 960px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: none; }
+  .main { margin-left: 0; }
+  .burger { display: flex; }
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .rooms-grid { grid-template-columns: repeat(3, 1fr); }
+  .report-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .rooms-grid { grid-template-columns: 1fr 1fr; }
+  .caja-grid { grid-template-columns: 1fr; }
+  .report-grid { grid-template-columns: 1fr; }
+  .hist-thead, .hist-row { grid-template-columns: 50px 1fr 80px 70px 70px 70px 60px; }
+  .view { padding: 14px; }
+}
+@media print {
+  #main-app > .layout > .sidebar,
+  #main-app > .layout > .main > .topbar { display: none; }
+  .main { margin-left: 0; }
+  body { background: #fff; color: #000; }
+}
+</style>
+</head>
+<body>
+<div id="app-root">
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="login-logo">M</div>
+      <div class="login-title">MotelOS <span style="color:var(--acc)">Pro</span></div>
+      <div class="login-sub">Sistema avanzado de gestión · La Paz, Bolivia</div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Usuario</label>
+      <input class="form-input" id="li-user" type="text" placeholder="Ingresa tu usuario" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" id="li-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Ingresar al sistema</button>
+    <div class="login-err" id="login-err"></div>
+    <div class="login-users-hint">Usuarios: <b>admin</b> / <b>recepcion</b> · Clave: <b>motel123</b></div>
+  </div>
+</div>
+
+<!-- ═══════════════ MAIN APP ═══════════════ -->
+<div id="main-app">
+<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">M</div>
+      <div class="logo-name">Motel<em>OS</em> <span style="font-size:10px;color:var(--t3);font-family:'DM Sans'">Pro</span></div>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sb-avatar">?</div>
+      <div>
+        <div class="user-name" id="sb-uname">—</div>
+        <div class="user-role" id="sb-role">—</div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Principal</div>
+      <div class="nav-item active" onclick="navigate('home',this)">
+        <span class="nav-icon">⊞</span> Inicio
+        <span class="nav-badge" id="nb-alert">0</span>
+      </div>
+      <div class="nav-section">Gestión</div>
+      <div class="nav-item" onclick="navigate('caja',this)">
+        <span class="nav-icon">◈</span> Caja
+      </div>
+      <div class="nav-item" onclick="navigate('reporte',this)">
+        <span class="nav-icon">▦</span> Reporte del día
+      </div>
+      <div class="nav-item" onclick="navigate('historial',this)">
+        <span class="nav-icon">≡</span> Historial
+      </div>
+    </nav>
+    <div class="sidebar-caja" id="sb-caja-info">
+      <div class="caja-status"><span class="caja-dot closed" id="caja-dot"></span> Caja</div>
+      <div class="caja-val" id="sb-caja-val">Cerrada</div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+      <span class="version-tag">v3.0</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="burger" onclick="toggleSidebar()">
+          <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
+            <rect width="18" height="2" rx="1" fill="currentColor"/>
+            <rect y="6" width="14" height="2" rx="1" fill="currentColor"/>
+            <rect y="12" width="18" height="2" rx="1" fill="currentColor"/>
+          </svg>
+        </button>
+        <div class="page-info">
+          <div class="page-title" id="pg-title">Gestión de Piezas</div>
+          <div class="page-sub" id="pg-sub">16 habitaciones · La Paz, Bolivia</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="clock-pill" id="clock">--:--:--</div>
+        <div class="alert-bell" onclick="navigate('home',document.querySelector('.nav-item'))" title="Alertas activas">
+          🔔<div class="alert-dot" id="alert-dot"></div>
+        </div>
+        <div class="alert-bell" style="cursor:default" title="Atajos (Shift+?)">
+          <span style="font-size:13px;color:var(--t3)">⌘</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- VIEW: HOME -->
+    <div class="view active" id="view-home">
+      <div class="stats-row">
+        <div class="stat-card" style="--c:var(--green)">
+          <div class="stat-lbl">Disponibles</div>
+          <div class="stat-val" id="h-avail">0</div>
+          <div class="stat-sub">piezas libres</div>
+          <div class="stat-icon">✓</div>
+        </div>
+        <div class="stat-card" style="--c:var(--red)">
+          <div class="stat-lbl">Ocupadas</div>
+          <div class="stat-val" id="h-occ">0</div>
+          <div class="stat-sub">en uso ahora</div>
+          <div class="stat-icon">◉</div>
+        </div>
+        <div class="stat-card" style="--c:var(--amber)">
+          <div class="stat-lbl">Sucias</div>
+          <div class="stat-val" id="h-dirty">0</div>
+          <div class="stat-sub">por limpiar</div>
+          <div class="stat-icon">◌</div>
+        </div>
+        <div class="stat-card" style="--c:var(--blue)">
+          <div class="stat-lbl">En limpieza</div>
+          <div class="stat-val" id="h-clean">0</div>
+          <div class="stat-sub">en proceso</div>
+          <div class="stat-icon">✦</div>
+        </div>
+        <div class="stat-card" style="--c:var(--acc)">
+          <div class="stat-lbl">Ingresos hoy</div>
+          <div class="stat-val" id="h-income">0</div>
+          <div class="stat-sub" id="h-income-sub">0 servicios · Bs</div>
+          <div class="stat-icon">$</div>
+        </div>
+      </div>
+
+      <!-- Rooms sections -->
+      <div id="rooms-sections"></div>
+    </div>
+
+    <!-- VIEW: CAJA -->
+    <div class="view" id="view-caja">
+      <div class="caja-grid" id="caja-content">
+        <!-- rendered by JS -->
+      </div>
+      <div class="caja-history">
+        <div class="caja-hist-title">Historial de cajas anteriores</div>
+        <div id="caja-hist-list"></div>
+      </div>
+    </div>
+
+    <!-- VIEW: REPORTE -->
+    <div class="view" id="view-reporte">
+      <div class="report-grid" id="report-cards"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px;" id="charts-row"></div>
+      <div class="chart-area" id="hour-chart-area"></div>
+    </div>
+
+    <!-- VIEW: HISTORIAL -->
+    <div class="view" id="view-historial">
+      <div class="hist-toolbar">
+        <input type="date" class="hist-date-sel" id="hist-date" onchange="renderHistorial()">
+        <button class="hist-filter-btn active" onclick="setHistFilter('all',this)">Todos</button>
+        <button class="hist-filter-btn" onclick="setHistFilter('cash',this)">Efectivo</button>
+        <button class="hist-filter-btn" onclick="setHistFilter('qr',this)">QR</button>
+        <span style="margin-left:auto;font-size:11px;color:var(--t3)" id="hist-total-lbl"></span>
+      </div>
+      <div class="hist-table">
+        <div class="hist-thead">
+          <div class="th">Pieza</div>
+          <div class="th">Hora</div>
+          <div class="th">Duración</div>
+          <div class="th">Horas</div>
+          <div class="th">Total</div>
+          <div class="th">Pago</div>
+          <div class="th">Personal</div>
+        </div>
+        <div class="hist-tbody" id="hist-body"></div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /layout -->
+</div><!-- /main-app -->
+</div><!-- /app-root -->
+
+<!-- MODAL -->
+<div id="modal-root"></div>
+<!-- TOAST -->
+<div id="toast-container"></div>
+<!-- UNDO BAR -->
+<div id="undo-bar"><span id="undo-msg"></span><button class="undo-btn" onclick="doUndo()">Deshacer</button></div>
+<!-- KBD OVERLAY -->
+<div id="kbd-overlay">
+  <div class="kbd-panel">
+    <div class="kbd-title" style="display:flex;align-items:center;justify-content:space-between">
+      Atajos de teclado
+      <button class="btn btn-ghost" style="padding:4px 10px;font-size:12px" onclick="closeKbd()">✕</button>
+    </div>
+    <div class="kbd-row"><span class="kbd-desc">Ir al Inicio</span><div class="kbd-keys"><span class="kbd">Alt</span><span class="kbd">1</span></div></div>
+    <div class="kbd-row"><span class="kbd-desc">Ir a Caja</span><div class="kbd-keys"><span class="kbd">Alt</span><span class="kbd">2</span></div></div>
+    <div class="kbd-row"><span class="kbd-desc">Ir a Reporte</span><div class="kbd-keys"><span class="kbd">Alt</span><span class="kbd">3</span></div></div>
+    <div class="kbd-row"><span class="kbd-desc">Ir a Historial</span><div class="kbd-keys"><span class="kbd">Alt</span><span class="kbd">4</span></div></div>
+    <div class="kbd-row"><span class="kbd-desc">Ocupar pieza 1–9</span><div class="kbd-keys"><span class="kbd">Shift</span><span class="kbd">1-9</span></div></div>
+    <div class="kbd-row"><span class="kbd-desc">Cerrar modal</span><div class="kbd-keys"><span class="kbd">Esc</span></div></div>
+    <div class="kbd-row"><span class="kbd-desc">Deshacer acción</span><div class="kbd-keys"><span class="kbd">Ctrl</span><span class="kbd">Z</span></div></div>
+    <div class="kbd-row"><span class="kbd-desc">Estos atajos</span><div class="kbd-keys"><span class="kbd">Shift</span><span class="kbd">?</span></div></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   CONFIGURACIÓN
+══════════════════════════════════════════════════════════════ */
+const CFG = {
+  TOTAL_ROOMS: 16,
+  TARIFFS:     { 1: 30, 2: 50, 3: 70 },
+  EXTRA_PER_H: 20,
+  GRACE_MIN:   10,
+  WARN_MIN:    10,   // minutos antes de cumplir hora para alertar
+  DAILY_GOAL:  1200, // Bs meta diaria (para barra de progreso)
+};
+
+const USERS = {
+  admin:     { pass: 'motel123', role: 'Administrador',  name: 'Administrador' },
+  recepcion: { pass: 'motel123', role: 'Recepcionista',  name: 'Recepción'     },
+};
+
+/* ══════════════════════════════════════════════════════════════
+   PERSISTENCE KEYS
+══════════════════════════════════════════════════════════════ */
+const K = {
+  ROOMS:    'motelPro_rooms_v5',
+  HISTORY:  'motelPro_history_v5',
+  CAJA:     'motelPro_caja_v5',
+  CAJA_HIST:'motelPro_caja_hist_v5',
+  CONSUMOS: 'motelPro_consumos_v5',
+  SESSION:  'motelPro_session',
+};
+
+// Productos de acceso rápido
+const QUICK_PRODUCTS = [
+  { name: 'Agua mineral',     price: 8  },
+  { name: 'Soda / Refresco',  price: 12 },
+  { name: 'Cerveza',          price: 20 },
+  { name: 'Snack',            price: 10 },
+  { name: 'Condones',         price: 15 },
+  { name: 'Toalla extra',     price: 5  },
+];
+
+/* ══════════════════════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════════════════════ */
+let state = {
+  session:   null,
+  rooms:     [],
+  history:   [],
+  caja:      null,
+  cajaHist:  [],
+  consumos:  {},    // { [roomId]: [ {id, name, price, addedBy, time} ] }
+  histFilter:'all',
+  undoStack: [],
+};
+
+/* ══════════════════════════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════════════════════════ */
+const pad = n => String(n).padStart(2, '0');
+
+function nowLP() {
+  return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/La_Paz' }));
+}
+
+function formatElapsed(ms) {
+  const s = Math.floor(ms / 1000);
+  return `${pad(Math.floor(s/3600))}:${pad(Math.floor((s%3600)/60))}:${pad(s%60)}`;
+}
+
+function formatElapsedHuman(ms) {
+  const s = Math.floor(ms / 1000);
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = s % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m ${sec}s`;
+}
+
+function calcBilledHours(elapsedMs) {
+  const totalMin = elapsedMs / 60000;
+  const fullH = Math.floor(totalMin / 60);
+  const remMin = totalMin % 60;
+  return remMin > CFG.GRACE_MIN ? fullH + 1 : fullH;
+}
+
+function calcCost(elapsedMs) {
+  const billed = calcBilledHours(elapsedMs);
+  if (billed <= 0) return 0;
+  if (billed <= 3) return CFG.TARIFFS[billed] ?? CFG.TARIFFS[3];
+  return CFG.TARIFFS[3] + (billed - 3) * CFG.EXTRA_PER_H;
+}
+
+function getElapsed(room) {
+  if (!room.startTime) return 0;
+  return Date.now() - new Date(room.startTime).getTime();
+}
+
+function getCleanElapsed(room) {
+  if (!room.cleanStart) return 0;
+  return Date.now() - new Date(room.cleanStart).getTime();
+}
+
+// minutos hasta cumplir la proxima hora completa
+function minsToNextHour(elapsedMs) {
+  const totalMin = (elapsedMs / 60000);
+  const remMin   = totalMin % 60;
+  return 60 - remMin;
+}
+
+function todayStr() {
+  return nowLP().toISOString().slice(0, 10);
+}
+
+function todayEntries() {
+  const today = todayStr();
+  return state.history.filter(h => h.date === today);
+}
+
+function todayStats() {
+  const e = todayEntries();
+  return {
+    total:    e.reduce((a,x) => a + x.amount, 0),
+    count:    e.length,
+    cash:     e.filter(x => x.payMethod === 'cash').reduce((a,x) => a + x.amount, 0),
+    qr:       e.filter(x => x.payMethod === 'qr').reduce((a,x) => a + x.amount, 0),
+    cashCnt:  e.filter(x => x.payMethod === 'cash').length,
+    qrCnt:    e.filter(x => x.payMethod === 'qr').length,
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PERSISTENCE
+══════════════════════════════════════════════════════════════ */
+function save() {
+  try {
+    localStorage.setItem(K.ROOMS,    JSON.stringify(state.rooms));
+    localStorage.setItem(K.HISTORY,  JSON.stringify(state.history));
+    localStorage.setItem(K.CAJA,     JSON.stringify(state.caja));
+    localStorage.setItem(K.CAJA_HIST,JSON.stringify(state.cajaHist));
+    localStorage.setItem(K.SESSION,  JSON.stringify(state.session));
+  } catch(e) {}
+}
+
+function load() {
+  try {
+    const r = localStorage.getItem(K.ROOMS);
+    if (r) state.rooms = JSON.parse(r);
+    else initRooms();
+    const h = localStorage.getItem(K.HISTORY);
+    if (h) state.history = JSON.parse(h);
+    const c = localStorage.getItem(K.CAJA);
+    if (c) state.caja = JSON.parse(c);
+    const ch = localStorage.getItem(K.CAJA_HIST);
+    if (ch) state.cajaHist = JSON.parse(ch);
+    const s = localStorage.getItem(K.SESSION);
+    if (s) state.session = JSON.parse(s);
+  } catch(e) { initRooms(); }
+}
+
+function initRooms() {
+  state.rooms = Array.from({ length: CFG.TOTAL_ROOMS }, (_, i) => ({
+    id: i + 1,
+    status: 'available',
+    startTime: null,
+    cleanStart: null,
+    attendedBy: null,
+  }));
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AUTH
+══════════════════════════════════════════════════════════════ */
+function doLogin() {
+  const u = document.getElementById('li-user').value.trim().toLowerCase();
+  const p = document.getElementById('li-pass').value;
+  const err = document.getElementById('login-err');
+  if (!USERS[u] || USERS[u].pass !== p) {
+    err.textContent = 'Usuario o contraseña incorrectos.';
+    return;
+  }
+  state.session = { user: u, name: USERS[u].name, role: USERS[u].role };
+  save();
+  startApp();
+}
+
+function doLogout() {
+  if (!confirm('¿Cerrar sesión?')) return;
+  state.session = null;
+  save();
+  document.getElementById('main-app').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('li-pass').value = '';
+  document.getElementById('login-err').textContent = '';
+}
+
+document.getElementById('li-pass').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doLogin();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   APP START
+══════════════════════════════════════════════════════════════ */
+function startApp() {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-app').style.display = 'block';
+
+  // Populate sidebar user info
+  const s = state.session;
+  document.getElementById('sb-avatar').textContent = s.name[0].toUpperCase();
+  document.getElementById('sb-uname').textContent  = s.name;
+  document.getElementById('sb-role').textContent   = s.role;
+
+  // Set historial date to today
+  document.getElementById('hist-date').value = todayStr();
+
+  renderAll();
+  startTick();
+  setupKbdShortcuts();
+  updateCajaSidebar();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RENDER ALL
+══════════════════════════════════════════════════════════════ */
+function renderAll() {
+  renderHomeStats();
+  renderRoomsSections();
+  renderCajaView();
+  renderReporteView();
+  renderHistorial();
+  updateAlertBadge();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HOME STATS
+══════════════════════════════════════════════════════════════ */
+function renderHomeStats() {
+  const st = todayStats();
+  const avail   = state.rooms.filter(r => r.status === 'available').length;
+  const occ     = state.rooms.filter(r => r.status === 'occupied').length;
+  const dirty   = state.rooms.filter(r => r.status === 'dirty').length;
+  const cleaning= state.rooms.filter(r => r.status === 'cleaning').length;
+
+  setText('h-avail', avail);
+  setText('h-occ',   occ);
+  setText('h-dirty', dirty);
+  setText('h-clean', cleaning);
+  setText('h-income', st.total + ' Bs');
+  setText('h-income-sub', `${st.count} servicios · ${st.cash} Bs efectivo · ${st.qr} Bs QR`);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ROOMS SECTIONS
+══════════════════════════════════════════════════════════════ */
+const STATUS_ORDER = ['available', 'occupied', 'dirty', 'cleaning'];
+const STATUS_LABELS = {
+  available: 'Disponibles',
+  occupied:  'Ocupadas',
+  dirty:     'Sucias',
+  cleaning:  'En limpieza',
+};
+
+function renderRoomsSections() {
+  const wrap = document.getElementById('rooms-sections');
+  wrap.innerHTML = '';
+
+  STATUS_ORDER.forEach(status => {
+    const rooms = state.rooms.filter(r => r.status === status);
+    const sec = document.createElement('div');
+
+    const countEl = `<div class="section-count">${rooms.length} piezas</div>`;
+    sec.innerHTML = `
+      <div class="section-hdr">
+        <div class="section-lbl">${STATUS_LABELS[status]}</div>
+        ${countEl}
+      </div>
+      <div class="rooms-grid" id="rg-${status}"></div>`;
+    wrap.appendChild(sec);
+
+    const grid = sec.querySelector(`#rg-${status}`);
+    if (rooms.length === 0) {
+      grid.innerHTML = `<div style="color:var(--t4);font-size:12px;padding:0 2px 16px;grid-column:1/-1">Ninguna pieza en este estado.</div>`;
+    } else {
+      rooms.forEach(room => grid.appendChild(buildRoomCard(room)));
+    }
+  });
+}
+
+function buildRoomCard(room) {
+  const el = document.createElement('div');
+  const elapsed = getElapsed(room);
+  const cost    = calcCost(elapsed);
+
+  // Determine alert state for occupied rooms
+  let alertClass = '';
+  let alertPill  = '';
+  if (room.status === 'occupied' && elapsed > 0) {
+    const minsToNext = minsToNextHour(elapsed);
+    const totalMin   = elapsed / 60000;
+    const remMin     = totalMin % 60;
+    if (remMin > CFG.GRACE_MIN && Math.floor(totalMin / 60) > 0) {
+      // exceeded with grace — already counted in cost but show warning
+    }
+    if (minsToNext <= CFG.WARN_MIN && minsToNext > 0) {
+      alertClass = 'alert-soon';
+      alertPill  = `<div class="room-alert-pill pill-warn">⚠ Faltan ${Math.ceil(minsToNext)} min para hora</div>`;
+    }
+    const remMinActual = totalMin % 60;
+    if (remMinActual > CFG.GRACE_MIN) {
+      alertClass = 'alert-over';
+      alertPill  = `<div class="room-alert-pill pill-over">⏰ Tiempo excedido</div>`;
+    }
+  }
+
+  const badgeClass = {
+    available: 'rb-available', occupied: 'rb-occupied',
+    dirty: 'rb-dirty', cleaning: 'rb-cleaning',
+  }[room.status];
+  const badgeLabel = {
+    available: 'Disponible', occupied: 'Ocupada',
+    dirty: 'Sucia', cleaning: 'Limpiando',
+  }[room.status];
+
+  let body = '';
+  if (room.status === 'available') {
+    body = `<div class="room-icon">🛏️</div>
+      <button class="room-action" onclick="actionOccupy(${room.id})">+ Registrar entrada <span class="kbd" style="margin-left:4px">S+${room.id <= 9 ? room.id : '—'}</span></button>`;
+  } else if (room.status === 'occupied') {
+    body = `
+      <div class="room-timer${alertClass === 'alert-soon' ? ' warn' : alertClass === 'alert-over' ? ' over' : ''}" id="rt-${room.id}">${formatElapsed(elapsed)}</div>
+      <div class="room-cost" id="rc-${room.id}">${cost}<span class="unit"> Bs</span></div>
+      ${alertPill}
+      <div class="room-staff" id="rs-${room.id}">👤 ${room.attendedBy || '—'}</div>
+      <button class="room-action" onclick="actionRelease(${room.id})">Finalizar y cobrar</button>`;
+  } else if (room.status === 'dirty') {
+    body = `<div class="room-icon">🧹</div>
+      <div class="room-actions-row">
+        <button class="room-action" onclick="actionStartCleaning(${room.id})">Iniciar limpieza</button>
+        <button class="room-action" onclick="actionMarkClean(${room.id})">Marcar limpia</button>
+      </div>`;
+  } else if (room.status === 'cleaning') {
+    const ce = getCleanElapsed(room);
+    body = `<div class="room-icon" style="opacity:0.6">🧽</div>
+      <div class="room-timer" style="font-size:16px;color:var(--blue)" id="rct-${room.id}">${formatElapsed(ce)}</div>
+      <div class="room-staff" style="font-size:10px;color:var(--t3)">Iniciado por: ${room.cleanedBy || '—'}</div>
+      <button class="room-action" onclick="actionMarkClean(${room.id})">✓ Lista / Limpia</button>`;
+  }
+
+  el.className = `room-card ${room.status} ${alertClass}`;
+  el.id = `rc-${room.id}`;
+  el.innerHTML = `
+    <div class="rc-accent"></div>
+    <div class="room-hdr">
+      <div>
+        <div class="room-num">Pieza ${room.id}</div>
+      </div>
+      <div class="room-badge ${badgeClass}">${badgeLabel}</div>
+    </div>
+    <div class="room-divider"></div>
+    <div class="room-body">${body}</div>`;
+  return el;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ROOM ACTIONS
+══════════════════════════════════════════════════════════════ */
+function actionOccupy(id) {
+  const room = state.rooms.find(r => r.id === id);
+  if (!room || room.status !== 'available') return;
+  if (!state.caja?.open) {
+    toast('Debes abrir caja antes de registrar ingresos.', 'warning');
+    return;
+  }
+  pushUndo({ type: 'occupy', roomSnap: { ...room } });
+  room.status      = 'occupied';
+  room.startTime   = new Date().toISOString();
+  room.attendedBy  = state.session?.name || '—';
+  save(); renderAll();
+  toast(`Pieza ${id} registrada como ocupada.`, 'success');
+}
+
+function actionRelease(id) {
+  const room = state.rooms.find(r => r.id === id);
+  if (!room || room.status !== 'occupied') return;
+  const elapsed = getElapsed(room);
+  const cost    = calcCost(elapsed);
+  const billed  = calcBilledHours(elapsed);
+  const totalMin = elapsed / 60000;
+  const remMin   = Math.round(totalMin % 60);
+  const exceeded = remMin > CFG.GRACE_MIN;
+
+  let selMethod = null;
+
+  showModal(`
+    <div class="modal modal-xl">
+      <div class="modal-title">Finalizar Pieza ${id}</div>
+      <div class="modal-sub">Confirma el monto y selecciona método de pago</div>
+      ${exceeded ? `<div class="pill-warn-inline">⚠ Excedió ${CFG.GRACE_MIN} min — se cobra hora adicional</div>` : ''}
+      <div class="info-box">
+        <div class="info-row">
+          <span class="ik">Tiempo total</span>
+          <span class="iv">${formatElapsedHuman(elapsed)}</span>
+        </div>
+        <div class="info-row">
+          <span class="ik">Horas facturadas</span>
+          <span class="iv">${billed} hr${billed !== 1 ? 's' : ''}</span>
+        </div>
+        <div class="info-row">
+          <span class="ik">Atendido por</span>
+          <span class="iv">${room.attendedBy || '—'}</span>
+        </div>
+        <div class="info-row">
+          <span class="ik">Total a cobrar</span>
+          <span class="iv iv-big">${cost} Bs</span>
+        </div>
+      </div>
+      <div class="modal-sect-lbl">Método de pago</div>
+      <div class="pay-grid">
+        <button class="pay-btn" id="pb-cash" onclick="selPay('cash')">
+          <div class="pay-btn-icon">💵</div>
+          <div class="pay-btn-lbl">Efectivo</div>
+          <div class="pay-btn-desc">Pago en mano</div>
+        </button>
+        <button class="pay-btn" id="pb-qr" onclick="selPay('qr')">
+          <div class="pay-btn-icon">📱</div>
+          <div class="pay-btn-lbl">QR / Transferencia</div>
+          <div class="pay-btn-desc">Pago digital</div>
+        </button>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+        <button class="btn btn-success" id="conf-rel-btn" onclick="confirmRelease(${id},${cost},${elapsed},${billed})" disabled>
+          Confirmar cobro
+        </button>
+      </div>
+    </div>`);
+
+  window._selPayMethod = null;
+  window.selPay = m => {
+    window._selPayMethod = m;
+    document.getElementById('pb-cash')?.classList.toggle('selected', m === 'cash');
+    document.getElementById('pb-qr')?.classList.toggle('selected', m === 'qr');
+    const b = document.getElementById('conf-rel-btn');
+    if (b) { b.disabled = false; }
+  };
+}
+
+function confirmRelease(id, cost, elapsed, billed) {
+  const method = window._selPayMethod;
+  if (!method) return;
+  const room = state.rooms.find(r => r.id === id);
+  if (!room) return;
+
+  pushUndo({ type: 'release', roomSnap: { ...room }, histLen: state.history.length });
+
+  const now = nowLP();
+  const entry = {
+    id: Date.now(),
+    roomId:    id,
+    amount:    cost,
+    payMethod: method,
+    elapsed:   elapsed,
+    billedH:   billed,
+    attendedBy: room.attendedBy || '—',
+    date:  now.toISOString().slice(0,10),
+    time:  now.toISOString(),
+    hour:  now.getHours(),
+  };
+  state.history.push(entry);
+  room.status    = 'dirty';
+  room.startTime = null;
+  room.attendedBy = null;
+
+  closeModal();
+  save(); renderAll();
+  toast(`Pieza ${id} liberada — ${cost} Bs (${method === 'cash' ? 'Efectivo' : 'QR'})`, 'success');
+  setTimeout(() => showReceipt(entry), 300);
+}
+
+function actionStartCleaning(id) {
+  const room = state.rooms.find(r => r.id === id);
+  if (!room || room.status !== 'dirty') return;
+  pushUndo({ type: 'startClean', roomSnap: { ...room } });
+  room.status     = 'cleaning';
+  room.cleanStart = new Date().toISOString();
+  room.cleanedBy  = state.session?.name || '—';
+  save(); renderAll();
+  toast(`Pieza ${id} marcada en limpieza.`, 'info');
+}
+
+function actionMarkClean(id) {
+  const room = state.rooms.find(r => r.id === id);
+  if (!room || (room.status !== 'dirty' && room.status !== 'cleaning')) return;
+  showConfirm(
+    `¿Marcar la Pieza ${id} como limpia y disponible?`,
+    () => {
+      pushUndo({ type: 'markClean', roomSnap: { ...room } });
+      room.status     = 'available';
+      room.cleanStart = null;
+      room.cleanedBy  = null;
+      save(); renderAll();
+      toast(`Pieza ${id} disponible.`, 'success');
+    }
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════
+   RECEIPT / COMPROBANTE
+══════════════════════════════════════════════════════════════ */
+function showReceipt(entry) {
+  const dt = new Date(entry.time);
+  const dateStr = dt.toLocaleDateString('es-BO', { day:'2-digit', month:'2-digit', year:'numeric' });
+  const timeStr = dt.toLocaleTimeString('es-BO', { hour:'2-digit', minute:'2-digit' });
+  showModal(`
+    <div class="modal">
+      <div class="modal-title">🧾 Comprobante</div>
+      <div class="modal-sub">Registro de servicio — Pieza ${entry.roomId}</div>
+      <div class="comprobante">
+        <div class="comprobante-title">MOTEL OS PRO · LA PAZ, BOLIVIA</div>
+        <div class="comprobante-div"></div>
+        <div class="comprobante-row"><span>Pieza</span><span>Nº ${entry.roomId}</span></div>
+        <div class="comprobante-row"><span>Fecha</span><span>${dateStr}</span></div>
+        <div class="comprobante-row"><span>Hora</span><span>${timeStr}</span></div>
+        <div class="comprobante-row"><span>Duración</span><span>${formatElapsedHuman(entry.elapsed)}</span></div>
+        <div class="comprobante-row"><span>Horas fact.</span><span>${entry.billedH} hr</span></div>
+        <div class="comprobante-row"><span>Método</span><span>${entry.payMethod === 'cash' ? 'Efectivo' : 'QR/Transf.'}</span></div>
+        <div class="comprobante-row"><span>Atendido por</span><span>${entry.attendedBy}</span></div>
+        <div class="comprobante-div"></div>
+        <div class="comprobante-total">${entry.amount} Bs</div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cerrar</button>
+        <button class="btn btn-primary" onclick="window.print()">🖨 Imprimir</button>
+      </div>
+    </div>`);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CAJA
+══════════════════════════════════════════════════════════════ */
+function renderCajaView() {
+  const caja = state.caja;
+  const st   = todayStats();
+  const content = document.getElementById('caja-content');
+
+  if (!caja || !caja.open) {
+    content.innerHTML = `
+      <div class="caja-card">
+        <div class="caja-card-title">Apertura de caja</div>
+        <div class="caja-open-form">
+          <div>
+            <label class="form-label">Monto inicial (Bs)</label>
+            <input class="form-input" id="caja-init" type="number" min="0" placeholder="Ej: 200" style="margin-top:6px">
+          </div>
+          <button class="btn btn-success" onclick="abrirCaja()">Abrir caja</button>
+        </div>
+        <div style="margin-top:20px;font-size:12px;color:var(--t3)">
+          La caja registra todos los movimientos del turno actual.
+        </div>
+      </div>
+      <div class="caja-card" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;opacity:0.4">
+        <div style="font-size:40px">🔒</div>
+        <div style="font-size:13px;color:var(--t3)">Caja cerrada</div>
+      </div>`;
+  } else {
+    const openDt = new Date(caja.openTime);
+    const openStr = openDt.toLocaleTimeString('es-BO', { hour:'2-digit', minute:'2-digit' });
+    const openDateStr = openDt.toLocaleDateString('es-BO');
+    const efectivoEsperado = (caja.initialAmount || 0) + st.cash;
+    const diferencia = efectivoEsperado - (caja.initialAmount || 0) - st.cash; // 0 si coincide
+
+    content.innerHTML = `
+      <div class="caja-card">
+        <div class="caja-card-title">Caja abierta ✓</div>
+        <div class="caja-lbl">Monto inicial</div>
+        <div class="caja-big">${caja.initialAmount} Bs</div>
+        <div style="margin-top:4px;font-size:11px;color:var(--t3)">Abierta: ${openStr} · ${openDateStr}</div>
+        <div style="margin-top:4px;font-size:11px;color:var(--t3)">Por: ${caja.openUser}</div>
+      </div>
+      <div class="caja-card">
+        <div class="caja-card-title">Estado actual</div>
+        <div class="caja-row"><span class="caja-row-k">Efectivo esperado</span><span class="caja-row-v pos">${efectivoEsperado} Bs</span></div>
+        <div class="caja-row"><span class="caja-row-k">Ingresos QR</span><span class="caja-row-v">${st.qr} Bs</span></div>
+        <div class="caja-row"><span class="caja-row-k">Total generado</span><span class="caja-row-v">${st.total} Bs</span></div>
+        <div class="caja-row"><span class="caja-row-k">Servicios</span><span class="caja-row-v">${st.count}</span></div>
+        <div style="margin-top:14px">
+          <button class="btn btn-danger" onclick="cerrarCaja()">Cerrar caja del día</button>
+        </div>
+      </div>`;
+  }
+
+  // Historial de cajas
+  const histEl = document.getElementById('caja-hist-list');
+  const hist   = state.cajaHist.slice().reverse().slice(0, 10);
+  if (hist.length === 0) {
+    histEl.innerHTML = '<div class="empty-state"><div class="empty-icon">📋</div><div>Sin cajas anteriores</div></div>';
+  } else {
+    histEl.innerHTML = hist.map(c => `
+      <div class="hist-item">
+        <span class="hist-date">${c.date}</span>
+        <span class="hist-info">Inicial: ${c.initial} Bs · Efectivo: ${c.cash} Bs · QR: ${c.qr} Bs</span>
+        <span class="hist-total">${c.total} Bs</span>
+      </div>`).join('');
+  }
+}
+
+function abrirCaja() {
+  const init = parseFloat(document.getElementById('caja-init')?.value) || 0;
+  state.caja = {
+    open:          true,
+    initialAmount: init,
+    openTime:      new Date().toISOString(),
+    openUser:      state.session?.name || '—',
+  };
+  save(); renderAll(); updateCajaSidebar();
+  toast('Caja abierta correctamente.', 'success');
+}
+
+function cerrarCaja() {
+  const st   = todayStats();
+  const caja = state.caja;
+  showConfirm(
+    `¿Cerrar caja del día?\nTotal generado: ${st.total} Bs\nEfectivo: ${st.cash} Bs · QR: ${st.qr} Bs`,
+    () => {
+      const closedCaja = {
+        date:    nowLP().toISOString().slice(0,10),
+        initial: caja.initialAmount,
+        total:   st.total,
+        cash:    st.cash,
+        qr:      st.qr,
+        count:   st.count,
+        openedBy: caja.openUser,
+        closedBy: state.session?.name || '—',
+        closeTime: new Date().toISOString(),
+      };
+      state.cajaHist.push(closedCaja);
+      state.caja = { open: false };
+      save(); renderAll(); updateCajaSidebar();
+      toast('Caja cerrada y registrada.', 'success');
+    }
+  );
+}
+
+function updateCajaSidebar() {
+  const dot = document.getElementById('caja-dot');
+  const val = document.getElementById('sb-caja-val');
+  if (state.caja?.open) {
+    dot?.classList.replace('closed','open');
+    if (val) val.textContent = `Abierta · ${state.caja.initialAmount} Bs`;
+  } else {
+    dot?.classList.replace('open','closed');
+    if (val) val.textContent = 'Cerrada';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   REPORTE
+══════════════════════════════════════════════════════════════ */
+function renderReporteView() {
+  const entries = todayEntries();
+  const st      = todayStats();
+
+  // Best room
+  const roomCounts = {};
+  entries.forEach(e => { roomCounts[e.roomId] = (roomCounts[e.roomId] || 0) + 1; });
+  const bestRoom = Object.entries(roomCounts).sort((a,b) => b[1]-a[1])[0];
+
+  // Avg time
+  const avgMs = entries.length ? entries.reduce((a,e) => a + (e.elapsed || 0), 0) / entries.length : 0;
+
+  // Peak hour
+  const hourCounts = {};
+  entries.forEach(e => { if (e.hour !== undefined) hourCounts[e.hour] = (hourCounts[e.hour]||0)+1; });
+  const peakHour = Object.entries(hourCounts).sort((a,b)=>b[1]-a[1])[0];
+
+  const cards = [
+    { lbl:'Total ingresos', val: st.total + ' Bs', sub: `meta: ${CFG.DAILY_GOAL} Bs`, },
+    { lbl:'Servicios realizados', val: st.count, sub: `${st.cashCnt} efec · ${st.qrCnt} QR`, },
+    { lbl:'Pieza más usada', val: bestRoom ? `Pieza ${bestRoom[0]}` : '—', sub: bestRoom ? `${bestRoom[1]} veces` : 'Sin datos', },
+    { lbl:'Tiempo promedio', val: avgMs ? formatElapsedHuman(avgMs) : '—', sub: 'por servicio', },
+    { lbl:'Hora pico', val: peakHour ? `${peakHour[0]}:00` : '—', sub: peakHour ? `${peakHour[1]} servicios` : 'Sin datos', },
+    { lbl:'Ocupación actual', val: state.rooms.filter(r=>r.status==='occupied').length + '/16', sub: 'piezas en uso', },
+  ];
+
+  document.getElementById('report-cards').innerHTML = cards.map(c => `
+    <div class="report-card">
+      <div class="report-lbl">${c.lbl}</div>
+      <div class="report-val">${c.val}</div>
+      <div class="report-sub">${c.sub}</div>
+    </div>`).join('');
+
+  // Charts
+  const chartsRow = document.getElementById('charts-row');
+  chartsRow.innerHTML = `
+    <div class="chart-area">
+      <div class="chart-title">Ingresos: Efectivo vs QR</div>
+      <div class="donut-wrap">
+        <canvas id="donut-canvas" width="120" height="120"></canvas>
+        <div class="donut-legend">
+          <div class="dl-item"><div class="dl-dot" style="background:var(--green)"></div><span class="dl-name">Efectivo</span><span class="dl-pct">${st.total > 0 ? Math.round(st.cash/st.total*100) : 0}%</span></div>
+          <div class="dl-item"><div class="dl-dot" style="background:var(--blue)"></div><span class="dl-name">QR / Transf.</span><span class="dl-pct">${st.total > 0 ? Math.round(st.qr/st.total*100) : 0}%</span></div>
+          <div style="margin-top:8px;font-size:12px;color:var(--t2)">Total: <b>${st.total} Bs</b></div>
+          <div style="font-size:11px;color:var(--t3)">${st.cash} Bs · ${st.qr} Bs</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-area">
+      <div class="chart-title">Progreso del día</div>
+      ${buildBarChart(st)}
+    </div>`;
+
+  drawDonut('donut-canvas', st.cash, st.qr);
+
+  // Hourly chart
+  document.getElementById('hour-chart-area').innerHTML = `
+    <div class="chart-title">Actividad por hora del día</div>
+    ${buildHourChart(entries)}`;
+}
+
+function drawDonut(canvasId, cash, qr) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const total = cash + qr;
+  ctx.clearRect(0, 0, 120, 120);
+  const cx = 60, cy = 60, r = 48, lw = 14;
+  ctx.lineWidth = lw;
+  ctx.lineCap   = 'butt';
+
+  if (total === 0) {
+    ctx.strokeStyle = '#2a2f47';
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+    return;
+  }
+  const cashAngle = (cash / total) * Math.PI * 2;
+  // cash arc
+  ctx.strokeStyle = '#22d3a0';
+  ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI/2, -Math.PI/2 + cashAngle); ctx.stroke();
+  // qr arc
+  ctx.strokeStyle = '#38bfff';
+  ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI/2 + cashAngle, -Math.PI/2 + Math.PI*2); ctx.stroke();
+  // center text
+  ctx.fillStyle = '#f0f2ff';
+  ctx.font = 'bold 14px Syne, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(total + ' Bs', cx, cy);
+}
+
+function buildBarChart(st) {
+  const goal = CFG.DAILY_GOAL;
+  const pct  = Math.min(100, st.total > 0 ? Math.round(st.total / goal * 100) : 0);
+  const cashPct = st.total > 0 ? Math.round(st.cash / goal * 100) : 0;
+  const qrPct   = st.total > 0 ? Math.round(st.qr   / goal * 100) : 0;
+
+  const makeBar = (h, cls, label, val) => `
+    <div class="bar-col">
+      <div class="bar-val">${val} Bs</div>
+      <div class="bar-fill ${cls}" style="height:${h}%"></div>
+      <div class="bar-lbl">${label}</div>
+    </div>`;
+
+  return `<div class="bar-chart" style="height:140px;align-items:flex-end;gap:14px;">
+    ${makeBar(pct, 'total', 'Total', st.total)}
+    ${makeBar(Math.min(100, cashPct), 'cash', 'Efect.', st.cash)}
+    ${makeBar(Math.min(100, qrPct), 'qr', 'QR', st.qr)}
+    <div class="bar-col" style="flex:0;align-items:flex-start;justify-content:flex-end;padding-bottom:18px">
+      <div style="font-size:10px;color:var(--t4);white-space:nowrap">Meta: ${goal} Bs</div>
+      <div style="font-size:10px;color:var(--acc);margin-top:4px">${pct}% logrado</div>
+    </div>
+  </div>`;
+}
+
+function buildHourChart(entries) {
+  const counts = Array(24).fill(0);
+  entries.forEach(e => { if (e.hour !== undefined) counts[e.hour]++; });
+  const max = Math.max(...counts, 1);
+  const bars = counts.map((c, h) => {
+    const pct = Math.round((c / max) * 100);
+    const isPeak = c === max && c > 0;
+    return `<div class="hour-col">
+      <div class="hour-bar${isPeak ? ' peak' : ''}" style="height:${Math.max(2, pct)}%"></div>
+      <div class="hour-tick">${h % 4 === 0 ? h + 'h' : ''}</div>
+    </div>`;
+  }).join('');
+  return `<div class="hour-chart">${bars}</div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HISTORIAL
+══════════════════════════════════════════════════════════════ */
+function setHistFilter(f, btn) {
+  state.histFilter = f;
+  document.querySelectorAll('.hist-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistorial();
+}
+
+function renderHistorial() {
+  const dateVal = document.getElementById('hist-date')?.value || todayStr();
+  let entries = state.history.filter(h => h.date === dateVal);
+  if (state.histFilter !== 'all') entries = entries.filter(h => h.payMethod === state.histFilter);
+  entries = entries.slice().reverse();
+
+  const totalLbl = document.getElementById('hist-total-lbl');
+  if (totalLbl) {
+    const total = entries.reduce((a,e) => a + e.amount, 0);
+    totalLbl.textContent = `${entries.length} registros · ${total} Bs`;
+  }
+
+  const body = document.getElementById('hist-body');
+  if (!body) return;
+  if (entries.length === 0) {
+    body.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div><div>Sin registros para esta fecha / filtro</div></div>`;
+    return;
+  }
+  body.innerHTML = entries.map(e => {
+    const t   = new Date(e.time);
+    const hr  = pad(t.getHours()), mn = pad(t.getMinutes());
+    const tag = e.payMethod === 'cash'
+      ? '<span class="pay-tag tag-cash">Efectivo</span>'
+      : '<span class="pay-tag tag-qr">QR</span>';
+    return `<div class="hist-row">
+      <div class="td td-bold">P. ${e.roomId}</div>
+      <div class="td td-mono">${hr}:${mn}</div>
+      <div class="td">${formatElapsedHuman(e.elapsed || 0)}</div>
+      <div class="td">${e.billedH || '—'}h</div>
+      <div class="td td-bold">${e.amount} Bs</div>
+      <div class="td">${tag}</div>
+      <div class="td" style="font-size:11px">${e.attendedBy || '—'}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════════════════════ */
+const PAGE_META = {
+  home:     ['Gestión de Piezas', '16 habitaciones · La Paz, Bolivia'],
+  caja:     ['Control de Caja', 'Apertura · Cierre · Historial'],
+  reporte:  ['Reporte del Día', 'Estadísticas e indicadores en tiempo real'],
+  historial:['Historial', 'Registro de actividades por día'],
+};
+
+function navigate(view, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const viewEl = document.getElementById(`view-${view}`);
+  if (viewEl) viewEl.classList.add('active');
+  if (el) el.classList.add('active');
+  const [title, sub] = PAGE_META[view] || ['', ''];
+  setText('pg-title', title); setText('pg-sub', sub);
+  if (view === 'reporte')   renderReporteView();
+  if (view === 'historial') renderHistorial();
+  if (view === 'caja')      renderCajaView();
+  closeSidebar();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TICK
+══════════════════════════════════════════════════════════════ */
+function startTick() {
+  setInterval(tick, 1000);
+  tick();
+}
+
+function tick() {
+  // Clock
+  const tz = new Date().toLocaleTimeString('es-BO', { timeZone: 'America/La_Paz', hour12: false });
+  setText('clock', tz);
+
+  // Update occupied timers live
+  state.rooms.forEach(room => {
+    if (room.status === 'occupied' && room.startTime) {
+      const elapsed  = getElapsed(room);
+      const cost     = calcCost(elapsed);
+      const totalMin = elapsed / 60000;
+      const remMin   = totalMin % 60;
+      const minsNext = minsToNextHour(elapsed);
+
+      let timerClass = '';
+      if (minsNext <= CFG.WARN_MIN && minsNext > 0) timerClass = ' warn';
+      if (remMin > CFG.GRACE_MIN) timerClass = ' over';
+
+      const te = document.getElementById(`rt-${room.id}`);
+      if (te) { te.textContent = formatElapsed(elapsed); te.className = `room-timer${timerClass}`; }
+      const ce = document.getElementById(`rc-${room.id}`);
+      if (ce) ce.innerHTML = cost + '<span class="unit"> Bs</span>';
+    }
+    if (room.status === 'cleaning' && room.cleanStart) {
+      const ce = getCleanElapsed(room);
+      const te = document.getElementById(`rct-${room.id}`);
+      if (te) te.textContent = formatElapsed(ce);
+    }
+  });
+
+  // Update home stats (income only)
+  const st = todayStats();
+  setText('h-income', st.total + ' Bs');
+  setText('h-income-sub', `${st.count} servicios · ${st.cash} Bs efec · ${st.qr} Bs QR`);
+
+  updateAlertBadge();
+}
+
+function updateAlertBadge() {
+  let alertCount = 0;
+  state.rooms.forEach(room => {
+    if (room.status !== 'occupied' || !room.startTime) return;
+    const elapsed  = getElapsed(room);
+    const totalMin = elapsed / 60000;
+    const remMin   = totalMin % 60;
+    const minsNext = minsToNextHour(elapsed);
+    if ((minsNext <= CFG.WARN_MIN && minsNext > 0) || remMin > CFG.GRACE_MIN) alertCount++;
+  });
+  const nb = document.getElementById('nb-alert');
+  const ad = document.getElementById('alert-dot');
+  if (nb) { nb.textContent = alertCount; nb.classList.toggle('show', alertCount > 0); }
+  if (ad) { ad.classList.toggle('show', alertCount > 0); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   UNDO
+══════════════════════════════════════════════════════════════ */
+let undoTimer = null;
+
+function pushUndo(action) {
+  state.undoStack.push(action);
+  if (state.undoStack.length > 10) state.undoStack.shift();
+}
+
+function doUndo() {
+  const action = state.undoStack.pop();
+  if (!action) return;
+  const idx = state.rooms.findIndex(r => r.id === action.roomSnap.id);
+  if (idx !== -1) state.rooms[idx] = { ...action.roomSnap };
+  if (action.type === 'release' && action.histLen !== undefined) {
+    state.history = state.history.slice(0, action.histLen);
+  }
+  hideUndo(); save(); renderAll();
+  toast('Acción deshecha.', 'info');
+}
+
+function showUndo(msg) {
+  const bar = document.getElementById('undo-bar');
+  setText('undo-msg', msg);
+  bar.classList.add('show');
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(hideUndo, 7000);
+}
+
+function hideUndo() {
+  document.getElementById('undo-bar')?.classList.remove('show');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   KEYBOARD SHORTCUTS
+══════════════════════════════════════════════════════════════ */
+function setupKbdShortcuts() {
+  const navItems = document.querySelectorAll('.nav-item');
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Escape') { closeModal(); closeKbd(); }
+    if (e.altKey && e.key === '1') { navigate('home', navItems[0]); }
+    if (e.altKey && e.key === '2') { navigate('caja', navItems[1]); }
+    if (e.altKey && e.key === '3') { navigate('reporte', navItems[2]); }
+    if (e.altKey && e.key === '4') { navigate('historial', navItems[3]); }
+    if (e.ctrlKey && e.key === 'z') { doUndo(); }
+    if (e.shiftKey && e.key === '?') { document.getElementById('kbd-overlay').classList.add('show'); }
+    // Shift + 1-9: occupy room
+    if (e.shiftKey && !e.ctrlKey && !e.altKey && e.key >= '1' && e.key <= '9') {
+      const id = parseInt(e.key);
+      const room = state.rooms.find(r => r.id === id);
+      if (room?.status === 'available') actionOccupy(id);
+    }
+  });
+}
+
+function closeKbd() { document.getElementById('kbd-overlay').classList.remove('show'); }
+
+/* ══════════════════════════════════════════════════════════════
+   MODAL / CONFIRM
+══════════════════════════════════════════════════════════════ */
+function showModal(html) { document.getElementById('modal-root').innerHTML = html; }
+function closeModal()    { document.getElementById('modal-root').innerHTML = ''; }
+
+function showConfirm(message, onConfirm) {
+  showModal(`
+    <div class="modal-overlay" onclick="handleOverlay(event)">
+      <div class="modal">
+        <div class="modal-title">Confirmar acción</div>
+        <div class="info-box" style="white-space:pre-line;font-size:13px;color:var(--t2);line-height:1.7">${message}</div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+          <button class="btn btn-primary" id="confirm-ok">Confirmar</button>
+        </div>
+      </div>
+    </div>`);
+  document.getElementById('confirm-ok').onclick = () => { closeModal(); onConfirm(); };
+}
+
+function handleOverlay(e) { if (e.target.classList.contains('modal-overlay')) closeModal(); }
+
+/* ══════════════════════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════════════════════ */
+function toast(msg, type = 'info') {
+  const icons = { success:'✓', error:'✕', warning:'⚠', info:'ℹ' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${icons[type] || 'ℹ'}</span> <span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => {
+    el.style.animation = 'toastOut 0.25s forwards';
+    setTimeout(() => el.remove(), 250);
+  }, 3500);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SIDEBAR
+══════════════════════════════════════════════════════════════ */
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sb-overlay');
+  sb.classList.toggle('open');
+  ov.style.display = sb.classList.contains('open') ? 'block' : 'none';
+}
+function closeSidebar() {
+  document.getElementById('sidebar')?.classList.remove('open');
+  const ov = document.getElementById('sb-overlay');
+  if (ov) ov.style.display = 'none';
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════════════ */
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════════════════════ */
+(function boot() {
+  load();
+  if (state.session) {
+    startApp();
+  }
+  // login enter key
+  document.getElementById('li-user').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('li-pass').focus();
+  });
+})();
+</script>
+</body>
+</html>
